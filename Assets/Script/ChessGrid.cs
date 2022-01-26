@@ -12,13 +12,17 @@ public enum Status
 public class ChessGrid : MonoBehaviour
 {
     public Sprite[] spriteArray = new Sprite[3];
-    
-    
-    // 宣告你的列舉變數 遊戲狀態
+    public Text timeUIText;
+    public float time=0;
     public Status status;
     public int locateX;
     public int locateY;
 
+    void Start()
+    {
+        timeUIText = transform.GetChild(0).GetComponent<Text>();
+        StartCoroutine(passedDiffuseTime());
+    }
     public void changeColor(Status color)
     {
         if (color == Status.safe)
@@ -33,10 +37,28 @@ public class ChessGrid : MonoBehaviour
         {
             GetComponent<Image>().sprite = spriteArray[(int)Status.pending];
         }
-
     }
-    
-    
+
+    public IEnumerator passedDiffuseTime()
+    {
+        while(true)
+        {
+            int count=0;
+            yield return new WaitForSeconds(1); 
+            if(status == Status.infect)
+            {
+                time--;
+                timeUIText.text = "" + time;
+                if(time <= 0 ){
+                    time=GameManager.gameManager.diffuseTime;
+                    if(count >0){
+                        //diffuse 
+                    }
+                    count++;
+                }
+            }
+        }
+    }
 
 
     

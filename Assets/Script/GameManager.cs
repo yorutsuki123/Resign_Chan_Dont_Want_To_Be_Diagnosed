@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviour
 {
     public int day=0;
     public static GameManager gameManager;
-
+    public float diffuseTime = 16;
     public ChessGrid[,] gridArray = new ChessGrid[10, 8];
     public List<ChessGrid> infectList = new List<ChessGrid>();
     public Queue<ChessGrid> pendingQueue = new Queue<ChessGrid>();
@@ -60,6 +60,8 @@ public class GameManager : MonoBehaviour
                 if (hitGrid  != null && hitGrid.status == Status.infect)
                 {
                     pendingPush(hitGrid);
+                    hitGrid.time=0;
+                    hitGrid.timeUIText.text = "";
                 }  
             }
         }
