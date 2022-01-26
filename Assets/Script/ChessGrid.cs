@@ -19,13 +19,13 @@ public class ChessGrid : MonoBehaviour
     public int locateX;
     public int locateY;
 
-    public void changeColor(string color)
+    public void changeColor(Status color)
     {
-        if (color == "green")
+        if (color == Status.safe)
         {
             GetComponent<Image>().sprite = spriteArray[(int)Status.safe];
         }
-        else if (color == "red")
+        else if (color == Status.infect)
         {
             GetComponent<Image>().sprite = spriteArray[(int)Status.infect];
         }
