@@ -9,7 +9,7 @@ public enum Status
     pending   // 待處理
 }
 
-public class Grid : MonoBehaviour
+public class ChessGrid : MonoBehaviour
 {
     
     // 宣告你的列舉變數 遊戲狀態

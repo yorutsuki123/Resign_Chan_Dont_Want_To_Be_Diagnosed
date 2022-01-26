@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager gameManager;
 
-    public Grid[,] gridArray = new Grid[10, 8];
+    public ChessGrid[,] gridArray = new ChessGrid[10, 8];
     public List<Grid> infectList = new List<Grid>();
     public Queue<Grid> pendingQueue = new Queue<Grid>();
 
