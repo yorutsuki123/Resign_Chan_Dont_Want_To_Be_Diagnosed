@@ -7,26 +7,38 @@ public class GameManager : MonoBehaviour
     public static GameManager gameManager;
 
     public Grid[,] gridArray = new Grid[10, 8];
-    public List<Grid> infectList = new List<Grid>();
-    public Queue<Grid> pendingQueue = new Queue<Grid>();
+    List<Grid> infectList = new List<Grid>();
+    Queue<Grid> pendingQueue = new Queue<Grid>();
 
-    void pendingPush(Grid grid)
+    public void pendingPush(Grid grid)
     {
         if (pendingQueue.Count >= 3)
+            return;
+        if (infectList.FindIndex(grid) == -1)
             return;
         pendingQueue.Enqueue(grid);
     }
 
-    Grid pendingPop()
+    public void pendingPush(int x, int y)
+    {
+        pendingPush(gridArray[x, y]);
+    }
+
+    public Grid pendingPop(bool isSuccess)
     {
         if (pendingQueue.Count == 0)
             return null;
+        if (isSuccess)
+        {
+            int ind = infectList.FindIndex(pendingQueue.Peek());
+
+        }
         return pendingQueue.Dequeue();
     }
 
-    void setStatus(int x, int y, Status newStatus)
+    public void setStatus(int x, int y, Status newStatus)
     {
-        
+
     }
 
     // Start is called before the first frame update
