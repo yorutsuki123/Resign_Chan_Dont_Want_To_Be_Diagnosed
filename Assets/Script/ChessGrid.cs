@@ -6,7 +6,8 @@ public enum Status
 {
     safe, // 安全
     infect, // 感染
-    pending   // 待處理
+    pending,   // 待處理
+    none = -1  // 邊界外 (查詢座標用)
 }
 
 public class ChessGrid : MonoBehaviour
@@ -43,7 +44,6 @@ public class ChessGrid : MonoBehaviour
     {
         while(true)
         {
-            int count=0;
             yield return new WaitForSeconds(1); 
             if(status == Status.infect)
             {
@@ -51,18 +51,11 @@ public class ChessGrid : MonoBehaviour
                 timeUIText.text = "" + time;
                 if(time <= 0 ){
                     time=GameManager.gameManager.diffuseTime;
-                    if(count >0){
-                        //diffuse 
-                    }
-                    count++;
+                    diffuse();
                 }
             }
         }
     }
-
-
-    
-
 
     public void init(int x, int y)
     {
@@ -73,7 +66,7 @@ public class ChessGrid : MonoBehaviour
 
     public void diffuse()
     {
-        
+        print("diffuse");
 
     }
 

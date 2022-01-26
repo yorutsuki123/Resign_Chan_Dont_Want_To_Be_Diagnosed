@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager gameManager;
     public int day = 0;
-    public int speedupDay = 10;
+    public int speedupDay = 5;
     public float diffuseTime = 16.0f;
     public List<ChessGrid> gridSet = new List<ChessGrid>();
     public Queue<ChessGrid> pendingQueue = new Queue<ChessGrid>();
@@ -44,7 +44,7 @@ public class GameManager : MonoBehaviour
     }
 
     public void pendingPush(int x, int y)
-    {
+    { 
         pendingPush(gridSet.Find(tag => tag.locateX == x && tag.locateY == y));
     }
 
@@ -59,6 +59,7 @@ public class GameManager : MonoBehaviour
         else
         {
             setStatus(pendingQueue.Peek(), Status.infect);
+            pendingQueue.Peek().diffuse();
         }
         return pendingQueue.Dequeue();
     }
@@ -67,13 +68,22 @@ public class GameManager : MonoBehaviour
     {
         grid.status = newStatus;
         grid.changeColor(newStatus);
-        grid.time=0;
+        grid.time = 0.0f;
+        if (newStatus == Status.infect)
+            grid.time = diffuseTime;
         grid.timeUIText.text = "";
     }
 
     public void setStatus(int x, int y, Status newStatus)
     {
         setStatus(gridSet.Find(tag => tag.locateX == x && tag.locateY == y), newStatus);
+    }
+
+    public Status getStatus(int x, int y)
+    {
+        if (gridSet.FindAll(tag => tag.locateX == x && tag.locateY == y).Count == 0)
+            return Status.none;
+        return gridSet.Find(tag => tag.locateX == x && tag.locateY == y).status;
     }
 
     public void clickGrid()
@@ -91,11 +101,24 @@ public class GameManager : MonoBehaviour
                     {
                         pendingPush(hitGrid);
                     } 
+                    //TEST DO
+                    else if (hitGrid.status == Status.safe)
+                    {
+                        setStatus(hitGrid, Status.infect);
+                    }
+                    else if (hitGrid.status == Status.pending)
+                    {
+                        if (pendingQueue.Peek() == hitGrid)
+                        {
+                            pendingPop(true);
+                        }
+                    }
+                    print("NOW " + hitGrid.status);
+                    //TEST END
                 }
             }
         }
     }
-
 
     // Start is called before the first frame update
     void Awake()
