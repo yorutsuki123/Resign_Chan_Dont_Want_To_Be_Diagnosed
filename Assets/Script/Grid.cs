@@ -12,9 +12,8 @@ public enum Status
 public class Grid : MonoBehaviour
 {
     
-
     // 宣告你的列舉變數 遊戲狀態
-    Status status;
+    public Status status;
 
 
     public void diffuse()
