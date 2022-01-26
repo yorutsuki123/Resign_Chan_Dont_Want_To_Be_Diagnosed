@@ -35,7 +35,11 @@ public class ChessGrid : MonoBehaviour
         }
 
     }
+    
+    
 
+
+    
 
 
     public void init(int x, int y)

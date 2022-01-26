@@ -4,12 +4,20 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public int day=0;
     public static GameManager gameManager;
 
     public ChessGrid[,] gridArray = new ChessGrid[10, 8];
     public List<ChessGrid> infectList = new List<ChessGrid>();
     public Queue<ChessGrid> pendingQueue = new Queue<ChessGrid>();
-
+ 	IEnumerator passedDay()
+    {
+        while(true)
+        {
+            yield return new WaitForSeconds(5); 
+            day++;
+        }
+    }
     public void pendingPush(ChessGrid grid)
     {
         if (pendingQueue.Count >= 3)
@@ -40,11 +48,29 @@ public class GameManager : MonoBehaviour
     {
 
     }
+    
+    public void clickGrid()
+    {
+        if(Input.GetKeyDown(KeyCode.Mouse0)){
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, 10, -1); ;
+            if (hit.collider != null)
+            {
+                ChessGrid hitGrid = hit.collider.GetComponent<ChessGrid>();
+                if (hitGrid  != null && hitGrid.status == Status.infect)
+                {
+                    pendingPush(hitGrid);
+                }  
+            }
+        }
+    }
+
 
     // Start is called before the first frame update
     void Awake()
     {
         gameManager = this;
+        StartCoroutine(passedDay());
     }
 
     // Update is called once per frame
