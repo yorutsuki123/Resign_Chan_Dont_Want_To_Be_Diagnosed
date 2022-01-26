@@ -25,8 +25,9 @@ public class GridGenerate : MonoBehaviour
                 prefab.GetComponent<RectTransform>().anchoredPosition3D = new Vector2(createPos.x, createPos.y);
                 prefab.GetComponent<RectTransform>().localRotation = Quaternion.Euler(0, 0, 90);
                 prefab.GetComponent<RectTransform>().localScale = new Vector3(1,1,1);
-                GameManager.gameManager.gridArray[x, y] = prefab.GetComponent<ChessGrid>();
-                GameManager.gameManager.gridArray[x, y].init(x, y);
+                ChessGrid tmp = prefab.GetComponent<ChessGrid>();
+                tmp.init(x, y);
+                GameManager.gameManager.gridSet.Add(tmp);
             }
         }
     }

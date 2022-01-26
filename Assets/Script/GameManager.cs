@@ -4,32 +4,48 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public int day=0;
     public static GameManager gameManager;
-    public float diffuseTime = 16;
-    public ChessGrid[,] gridArray = new ChessGrid[10, 8];
-    public List<ChessGrid> infectList = new List<ChessGrid>();
+    public int day = 0;
+    public int speedupDay = 10;
+    public float diffuseTime = 16.0f;
+    public List<ChessGrid> gridSet = new List<ChessGrid>();
     public Queue<ChessGrid> pendingQueue = new Queue<ChessGrid>();
+
+    public int unsafeCount
+    {
+        get { return gridSet.FindAll(x => x.status == Status.infect || x.status == Status.pending).Count; }
+    }
+
+    public float unsafeProportion
+    {
+        get { return (float)unsafeCount / 80.0f; }
+    }
+
  	IEnumerator passedDay()
     {
         while(true)
         {
             yield return new WaitForSeconds(5); 
             day++;
+            if (day % speedupDay == 0) {
+                diffuseTime -= 1.0f;
+            }
         }
     }
+
     public void pendingPush(ChessGrid grid)
     {
         if (pendingQueue.Count >= 3)
             return;
-        if (infectList.FindIndex(x => x == grid) == -1)
+        if (grid.status != Status.infect)
             return;
         pendingQueue.Enqueue(grid);
+        setStatus(grid, Status.pending);
     }
 
     public void pendingPush(int x, int y)
     {
-        pendingPush(gridArray[x, y]);
+        pendingPush(gridSet.Find(tag => tag.locateX == x && tag.locateY == y));
     }
 
     public ChessGrid pendingPop(bool isSuccess)
@@ -38,17 +54,28 @@ public class GameManager : MonoBehaviour
             return null;
         if (isSuccess)
         {
-            int ind = infectList.FindIndex(x => x == pendingQueue.Peek());
-
+            setStatus(pendingQueue.Peek(), Status.safe);
+        }
+        else
+        {
+            setStatus(pendingQueue.Peek(), Status.infect);
         }
         return pendingQueue.Dequeue();
     }
 
+    public void setStatus(ChessGrid grid, Status newStatus)
+    {
+        grid.status = newStatus;
+        grid.changeColor(newStatus);
+        grid.time=0;
+        grid.timeUIText.text = "";
+    }
+
     public void setStatus(int x, int y, Status newStatus)
     {
-
+        setStatus(gridSet.Find(tag => tag.locateX == x && tag.locateY == y), newStatus);
     }
-    
+
     public void clickGrid()
     {
         if(Input.GetKeyDown(KeyCode.Mouse0)){
@@ -57,12 +84,14 @@ public class GameManager : MonoBehaviour
             if (hit.collider != null)
             {
                 ChessGrid hitGrid = hit.collider.GetComponent<ChessGrid>();
-                if (hitGrid  != null && hitGrid.status == Status.infect)
+                if (hitGrid  != null)
                 {
-                    pendingPush(hitGrid);
-                    hitGrid.time=0;
-                    hitGrid.timeUIText.text = "";
-                }  
+                    print(hitGrid.status + " " + hitGrid.locateX + " " + hitGrid.locateY); //TEST
+                    if (hitGrid.status == Status.infect)
+                    {
+                        pendingPush(hitGrid);
+                    } 
+                }
             }
         }
     }
@@ -78,6 +107,10 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        clickGrid();
+        if (pendingQueue.Count != 0)
+        {
+            // Call QTE if not QTE-ing
+        }
     }
 }
