@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     {
         if (pendingQueue.Count >= 3)
             return;
-        if (infectList.FindIndex(grid) == -1)
+        if (infectList.FindIndex(x => x == grid) == -1)
             return;
         pendingQueue.Enqueue(grid);
     }
@@ -24,13 +24,13 @@ public class GameManager : MonoBehaviour
         pendingPush(gridArray[x, y]);
     }
 
-    public Grid pendingPop(bool isSuccess)
+    public ChessGrid pendingPop(bool isSuccess)
     {
         if (pendingQueue.Count == 0)
             return null;
         if (isSuccess)
         {
-            int ind = infectList.FindIndex(pendingQueue.Peek());
+            int ind = infectList.FindIndex(x => x == pendingQueue.Peek());
 
         }
         return pendingQueue.Dequeue();
