@@ -50,7 +50,7 @@ public class ChessGrid : MonoBehaviour
                 time--;
                 timeUIText.text = "" + time;
                 if(time <= 0 ){
-                    time=GameManager.gameManager.diffuseTime;
+                    time=GameManager.gameManager.diffUseTime;
                     diffuse();
                 }
             }

@@ -7,7 +7,12 @@ public class GameManager : MonoBehaviour
     public static GameManager gameManager;
     public int day = 0;
     public int speedupDay = 5;
-    public float diffuseTime = 16.0f;
+    public float diffUseTime = 16.0f;
+    public float diffSpeedupTime = 1.0f;
+    public float diffInfTime = 3.0f;
+    public float infectUseTime = 8.0f;
+    public float infectSpeedupTime = 0.8f;
+    public float infectInfTime = 2.0f;
     public List<ChessGrid> gridSet = new List<ChessGrid>();
     public Queue<ChessGrid> pendingQueue = new Queue<ChessGrid>();
 
@@ -27,9 +32,22 @@ public class GameManager : MonoBehaviour
         {
             yield return new WaitForSeconds(5); 
             day++;
-            if (day % speedupDay == 0) {
-                diffuseTime -= 1.0f;
+            if (day % speedupDay == 0) 
+            {
+                if (diffUseTime > diffInfTime)
+                    diffUseTime -= diffSpeedupTime;
+                if (infectUseTime > infectInfTime)
+                    infectUseTime -= infectSpeedupTime;
             }
+        }
+    }
+
+    IEnumerator passedToInfect()
+    {
+        while(true)
+        {
+            yield return new WaitForSeconds(infectUseTime); 
+            // random check status == safe, then call setStatus()
         }
     }
 
@@ -70,7 +88,7 @@ public class GameManager : MonoBehaviour
         grid.changeColor(newStatus);
         grid.time = 0.0f;
         if (newStatus == Status.infect)
-            grid.time = diffuseTime;
+            grid.time = diffUseTime;
         grid.timeUIText.text = "";
     }
 
@@ -96,11 +114,12 @@ public class GameManager : MonoBehaviour
                 ChessGrid hitGrid = hit.collider.GetComponent<ChessGrid>();
                 if (hitGrid  != null)
                 {
-                    print(hitGrid.status + " " + hitGrid.locateX + " " + hitGrid.locateY); //TEST
+                    //print(hitGrid.status + " " + hitGrid.locateX + " " + hitGrid.locateY); //TEST
                     if (hitGrid.status == Status.infect)
                     {
                         pendingPush(hitGrid);
                     } 
+                    /*
                     //TEST DO
                     else if (hitGrid.status == Status.safe)
                     {
@@ -115,6 +134,7 @@ public class GameManager : MonoBehaviour
                     }
                     print("NOW " + hitGrid.status);
                     //TEST END
+                    */
                 }
             }
         }
