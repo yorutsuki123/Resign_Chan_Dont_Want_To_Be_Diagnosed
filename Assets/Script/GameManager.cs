@@ -7,10 +7,10 @@ public class GameManager : MonoBehaviour
     public static GameManager gameManager;
 
     public ChessGrid[,] gridArray = new ChessGrid[10, 8];
-    public List<Grid> infectList = new List<Grid>();
-    public Queue<Grid> pendingQueue = new Queue<Grid>();
+    public List<ChessGrid> infectList = new List<ChessGrid>();
+    public Queue<ChessGrid> pendingQueue = new Queue<ChessGrid>();
 
-    public void pendingPush(Grid grid)
+    public void pendingPush(ChessGrid grid)
     {
         if (pendingQueue.Count >= 3)
             return;
