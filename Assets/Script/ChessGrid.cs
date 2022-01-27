@@ -40,13 +40,44 @@ public class ChessGrid : MonoBehaviour
         }
     }
 
+    struct Locate
+    {
+        public int x;
+        public int y;
+
+        public Locate(int nX, int nY)
+        {
+            x = nX;
+            y = nY;
+        }
+    };
 
     public void diffuse()
     {
-        int ranX = locateX + Random.Range(-1,2);
-        int ranY = locateY + Random.Range(-1,2);
-        GameManager.gameManager.setStatus(ranX, ranY, Status.infect);
+        List<Locate> neighbour = new List<Locate>();
+        List<Locate> safeNeighbour = new List<Locate>();
+        neighbour.Add(new Locate(locateX, locateY + 1));
+        neighbour.Add(new Locate(locateX, locateY - 1));
+        neighbour.Add(new Locate(locateX - 1, locateY));
+        neighbour.Add(new Locate(locateX + 1, locateY));
+        neighbour.Add(new Locate(locateX - 1, locateY + (locateX % 2 == 0 ? -1 : 1)));
+        neighbour.Add(new Locate(locateX + 1, locateY + (locateX % 2 == 0 ? -1 : 1)));
+        foreach (Locate loc in neighbour)
+        {
+            if (GameManager.gameManager.getStatus(loc.x, loc.y) == Status.safe)
+                safeNeighbour.Add(loc);
+        }
+        int diffusePoint = Random.Range(1, 3);
+        for (int i = 0; i < diffusePoint && safeNeighbour.Count > 0; i++)
+        {
+            int randomIndex = Random.Range(0, safeNeighbour.Count);
+            int ranX = safeNeighbour[randomIndex].x;
+            int ranY = safeNeighbour[randomIndex].y;
+            GameManager.gameManager.setStatus(ranX, ranY, Status.infect);
+            safeNeighbour.RemoveAt(randomIndex);
+        }
     }
+
     public IEnumerator passedDiffuseTime()
     {
         int count=0;
