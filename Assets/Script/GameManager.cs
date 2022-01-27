@@ -4,32 +4,66 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public int day=0;
     public static GameManager gameManager;
-    public float diffuseTime = 16;
-    public ChessGrid[,] gridArray = new ChessGrid[10, 8];
-    public List<ChessGrid> infectList = new List<ChessGrid>();
+    public int day = 0;
+    public int speedupDay = 5;
+    public float diffUseTime = 16.0f;
+    public float diffSpeedupTime = 1.0f;
+    public float diffInfTime = 3.0f;
+    public float infectUseTime = 8.0f;
+    public float infectSpeedupTime = 0.8f;
+    public float infectInfTime = 2.0f;
+    public List<ChessGrid> gridSet = new List<ChessGrid>();
     public Queue<ChessGrid> pendingQueue = new Queue<ChessGrid>();
+
+    public int unsafeCount
+    {
+        get { return gridSet.FindAll(x => x.status == Status.infect || x.status == Status.pending).Count; }
+    }
+
+    public float unsafeProportion
+    {
+        get { return (float)unsafeCount / 80.0f; }
+    }
+
  	IEnumerator passedDay()
     {
         while(true)
         {
             yield return new WaitForSeconds(5); 
             day++;
+            if (day % speedupDay == 0) 
+            {
+                if (diffUseTime > diffInfTime)
+                    diffUseTime -= diffSpeedupTime;
+                if (infectUseTime > infectInfTime)
+                    infectUseTime -= infectSpeedupTime;
+            }
         }
     }
+
+    IEnumerator passedToInfect()
+    {
+        while(true)
+        {
+            yield return new WaitForSeconds(infectUseTime); 
+            // random check status == safe, then call setStatus()
+        }
+    }
+
     public void pendingPush(ChessGrid grid)
     {
         if (pendingQueue.Count >= 3)
             return;
-        if (infectList.FindIndex(x => x == grid) == -1)
+        if (grid.status != Status.infect)
             return;
         pendingQueue.Enqueue(grid);
+        setStatus(grid, Status.pending);
     }
 
     public void pendingPush(int x, int y)
-    {
-        pendingPush(gridArray[x, y]);
+    { 
+        pendingPush(gridSet.Find(tag => tag.locateX == x && tag.locateY == y));
     }
 
     public ChessGrid pendingPop(bool isSuccess)
@@ -38,17 +72,38 @@ public class GameManager : MonoBehaviour
             return null;
         if (isSuccess)
         {
-            int ind = infectList.FindIndex(x => x == pendingQueue.Peek());
-
+            setStatus(pendingQueue.Peek(), Status.safe);
+        }
+        else
+        {
+            setStatus(pendingQueue.Peek(), Status.infect);
+            pendingQueue.Peek().diffuse();
         }
         return pendingQueue.Dequeue();
     }
 
+    public void setStatus(ChessGrid grid, Status newStatus)
+    {
+        grid.status = newStatus;
+        grid.changeColor(newStatus);
+        grid.time = 0.0f;
+        if (newStatus == Status.infect)
+            grid.time = diffUseTime;
+        grid.timeUIText.text = "";
+    }
+
     public void setStatus(int x, int y, Status newStatus)
     {
-
+        setStatus(gridSet.Find(tag => tag.locateX == x && tag.locateY == y), newStatus);
     }
-    
+
+    public Status getStatus(int x, int y)
+    {
+        if (gridSet.FindAll(tag => tag.locateX == x && tag.locateY == y).Count == 0)
+            return Status.none;
+        return gridSet.Find(tag => tag.locateX == x && tag.locateY == y).status;
+    }
+
     public void clickGrid()
     {
         if(Input.GetKeyDown(KeyCode.Mouse0)){
@@ -57,16 +112,33 @@ public class GameManager : MonoBehaviour
             if (hit.collider != null)
             {
                 ChessGrid hitGrid = hit.collider.GetComponent<ChessGrid>();
-                if (hitGrid  != null && hitGrid.status == Status.infect)
+                if (hitGrid  != null)
                 {
-                    pendingPush(hitGrid);
-                    hitGrid.time=0;
-                    hitGrid.timeUIText.text = "";
-                }  
+                    //print(hitGrid.status + " " + hitGrid.locateX + " " + hitGrid.locateY); //TEST
+                    if (hitGrid.status == Status.infect)
+                    {
+                        pendingPush(hitGrid);
+                    } 
+                    /*
+                    //TEST DO
+                    else if (hitGrid.status == Status.safe)
+                    {
+                        setStatus(hitGrid, Status.infect);
+                    }
+                    else if (hitGrid.status == Status.pending)
+                    {
+                        if (pendingQueue.Peek() == hitGrid)
+                        {
+                            pendingPop(true);
+                        }
+                    }
+                    print("NOW " + hitGrid.status);
+                    //TEST END
+                    */
+                }
             }
         }
     }
-
 
     // Start is called before the first frame update
     void Awake()
@@ -78,6 +150,10 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        clickGrid();
+        if (pendingQueue.Count != 0)
+        {
+            // Call QTE if not QTE-ing
+        }
     }
 }

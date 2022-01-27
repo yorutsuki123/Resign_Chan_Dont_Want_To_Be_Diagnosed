@@ -220,8 +220,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   day: 0
+<<<<<<< HEAD
   diffuseTime: 16
   infectList: []
+=======
+  speedupDay: 10
+  diffuseTime: 16
+  gridSet: []
+>>>>>>> 7d25bd7d513b9759e3c41e5327c2269a1c58f389
 --- !u!1 &390089369
 GameObject:
   m_ObjectHideFlags: 0
@@ -369,11 +375,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8571617802395292700, guid: acb1f1951c6073b4da57a98a2db82fc8, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 965
+      value: 1747
       objectReference: {fileID: 0}
     - target: {fileID: 8571617802395292700, guid: acb1f1951c6073b4da57a98a2db82fc8, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -450
+      value: -362
       objectReference: {fileID: 0}
     - target: {fileID: 8571617802395292700, guid: acb1f1951c6073b4da57a98a2db82fc8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
