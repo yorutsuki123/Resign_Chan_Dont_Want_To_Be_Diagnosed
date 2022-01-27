@@ -123,9 +123,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spriteArray:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 21300000, guid: 758ec1593e03e9145afb04e8d283e353, type: 3}
+  - {fileID: 21300000, guid: 0599320b4e3db464282e9e722513d7ee, type: 3}
+  - {fileID: 21300000, guid: d799e581de770b04a99454eb638ae395, type: 3}
+  timeUIText: {fileID: 0}
+  time: 0
   status: 0
   locateX: 0
   locateY: 0

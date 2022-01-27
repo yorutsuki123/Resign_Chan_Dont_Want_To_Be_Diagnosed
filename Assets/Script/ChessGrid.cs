@@ -80,21 +80,18 @@ public class ChessGrid : MonoBehaviour
 
     public IEnumerator passedDiffuseTime()
     {
-        int count=0;
         while(true)
         {
             yield return new WaitForSeconds(1); 
             if(status == Status.infect)
             {
                 time--;
-                timeUIText.text = "" + time;
-                if(time <= 0 ){
+                if(time <= 0 )
+                {
                     time=GameManager.gameManager.diffUseTime;
-                    if(count >0){
-                        diffuse();
-                    }
-                    count++;
+                    diffuse();
                 }
+                timeUIText.text = "" + time;
             }
         }
     }

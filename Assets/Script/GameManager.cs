@@ -44,10 +44,19 @@ public class GameManager : MonoBehaviour
 
     IEnumerator passedToInfect()
     {
+        yield return new WaitForSeconds(1); 
         while(true)
         {
+            List<ChessGrid> safeGrid = new List<ChessGrid>();
+            foreach (ChessGrid grid in gridSet)
+            {
+                if (grid.status == Status.safe)
+                    safeGrid.Add(grid);
+            }
+            int randomIndex = Random.Range(0, safeGrid.Count);
+            setStatus(safeGrid[randomIndex], Status.infect);
+            print("INFECT " + safeGrid[randomIndex].locateX + " " + safeGrid[randomIndex].locateY);
             yield return new WaitForSeconds(infectUseTime); 
-            // random check status == safe, then call setStatus()
         }
     }
 
@@ -145,6 +154,13 @@ public class GameManager : MonoBehaviour
     {
         gameManager = this;
         StartCoroutine(passedDay());
+        StartCoroutine(passedToInfect());
+    }
+
+    void Start()
+    {
+        //
+        
     }
 
     // Update is called once per frame
