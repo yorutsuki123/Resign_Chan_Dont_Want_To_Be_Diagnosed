@@ -26,6 +26,11 @@ public class GameManager : MonoBehaviour
         get { return (float)unsafeCount / 80.0f; }
     }
 
+    public int pendingCount
+    {
+        get { return pendingQueue.Count; }
+    }
+
  	IEnumerator passedDay()
     {
         while(true)
