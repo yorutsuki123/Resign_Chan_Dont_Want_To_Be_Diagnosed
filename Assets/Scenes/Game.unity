@@ -219,8 +219,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00a53ffa971d8ec4bb7be3877630044f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  day: 0
+  diffuseTime: 16
   infectList: []
-  pendingQueue: []
 --- !u!1 &390089369
 GameObject:
   m_ObjectHideFlags: 0
@@ -297,6 +298,10 @@ PrefabInstance:
     - target: {fileID: 6526471761144538755, guid: acb1f1951c6073b4da57a98a2db82fc8, type: 3}
       propertyPath: m_Name
       value: GridPrefab
+      objectReference: {fileID: 0}
+    - target: {fileID: 6526471761144538755, guid: acb1f1951c6073b4da57a98a2db82fc8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8571617802395292700, guid: acb1f1951c6073b4da57a98a2db82fc8, type: 3}
       propertyPath: m_Pivot.x

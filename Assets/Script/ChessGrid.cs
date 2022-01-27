@@ -39,6 +39,13 @@ public class ChessGrid : MonoBehaviour
         }
     }
 
+
+    public void diffuse()
+    {
+        int ranX = locateX + Random.Range(-1,2);
+        int ranY = locateY + Random.Range(-1,2);
+        GameManager.gameManager.setStatus(ranX, ranY, Status.infect);
+    }
     public IEnumerator passedDiffuseTime()
     {
         while(true)
@@ -52,7 +59,7 @@ public class ChessGrid : MonoBehaviour
                 if(time <= 0 ){
                     time=GameManager.gameManager.diffuseTime;
                     if(count >0){
-                        //diffuse 
+                        diffuse();
                     }
                     count++;
                 }
@@ -71,11 +78,6 @@ public class ChessGrid : MonoBehaviour
         locateY = y;
     }
 
-    public void diffuse()
-    {
-        
-
-    }
 
 
 }
