@@ -105,6 +105,7 @@ public class GameManager : MonoBehaviour
             if(!gameOverObj.activeSelf)
             {
                 SoundManager.soundManager.playSound(SoundType.fail);
+                GetComponent<AudioSource>().Stop();
                 gameOverObj.SetActive(true);
             }
                

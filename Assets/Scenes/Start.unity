@@ -397,7 +397,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 103
+    m_FontSize: 79
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 10
@@ -408,7 +408,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: "\u8FAD\u8077\u91AC\u78BA\u8A3A\u4E86"
+  m_Text: "\u8FAD\u8077\u91AC\u9084\u4E0D\u60F3\u78BA\u8A3A"
 --- !u!222 &401476443
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -524,7 +524,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 16094e54b62c4aa48a001978d2b878f8, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 952e7d95fd14059439786725d5ad65dc, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.5
   m_Pitch: 1
