@@ -84,6 +84,11 @@ public class Gameqte : MonoBehaviour {
                     {
                         Qtekey.Clear();
                         tf=0;
+                        for(int i=0;i<4;i++)
+                        {
+                            qteText[i].text = "" ;
+                            qteImage[i].color = Color.black;
+                        }
                         GameManager.gameManager.pendingPop(false);
                         qteStr="";
                         qteCompare = '?';
