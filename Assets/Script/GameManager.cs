@@ -47,15 +47,18 @@ public class GameManager : MonoBehaviour
         while(true)
         {
             yield return new WaitForSeconds(5); 
-            day++;
-            if (day % speedupDay == 0) 
+            if(!isGameOver)
             {
-                if (diffUseTime > diffInfTime)
-                    diffUseTime -= diffSpeedupTime;
-                if (infectUseTime > infectInfTime)
-                    infectUseTime -= infectSpeedupTime;
+                day++;
+                if (day % speedupDay == 0) 
+                {
+                    if (diffUseTime > diffInfTime)
+                        diffUseTime -= diffSpeedupTime;
+                    if (infectUseTime > infectInfTime)
+                        infectUseTime -= infectSpeedupTime;
+                }
+                dayText.text = "存活天數: " + day;
             }
-            dayText.text = "存活天數: " + day;
         }
     }
 
