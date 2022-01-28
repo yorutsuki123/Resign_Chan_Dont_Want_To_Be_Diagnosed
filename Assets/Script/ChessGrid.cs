@@ -74,6 +74,7 @@ public class ChessGrid : MonoBehaviour
             int ranX = safeNeighbour[randomIndex].x;
             int ranY = safeNeighbour[randomIndex].y;
             GameManager.gameManager.setStatus(ranX, ranY, Status.infect);
+            SoundManager.soundManager.playSound(SoundType.spray);
             safeNeighbour.RemoveAt(randomIndex);
         }
     }

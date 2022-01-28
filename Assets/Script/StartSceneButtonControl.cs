@@ -6,15 +6,26 @@ using UnityEngine.SceneManagement;
 public class StartSceneButtonControl : MonoBehaviour
 {
 
-    public void changetogamescene()
+    public void changeToGameScene()
     {
         SceneManager.LoadScene(1);
     }
 
-    public void quitgame()
+    public void quitGame()
     {
         Application.Quit();
         Debug.Log("離開遊戲");  //Unity測試用
+    }
+    void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Return))
+        {
+            changeToGameScene();
+        }
+        else if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            quitGame();
+        }
     }
 
 }

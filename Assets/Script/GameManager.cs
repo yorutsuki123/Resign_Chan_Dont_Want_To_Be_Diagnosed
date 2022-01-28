@@ -1,6 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+public enum Girl
+{
+    safe, // 安全
+    infect, // 感染
+}
 
 public class GameManager : MonoBehaviour
 {
@@ -15,7 +22,11 @@ public class GameManager : MonoBehaviour
     public float infectInfTime = 2.0f;
     public List<ChessGrid> gridSet = new List<ChessGrid>();
     public Queue<ChessGrid> pendingQueue = new Queue<ChessGrid>();
-
+    public Text dayText;
+    public Text unsafeProportionText;
+    public GameObject gameOverObj;
+    public GameObject[] girlObj = new GameObject[2];
+    public bool isGameOver;
     public int unsafeCount
     {
         get { return gridSet.FindAll(x => x.status == Status.infect || x.status == Status.pending).Count; }
@@ -44,6 +55,7 @@ public class GameManager : MonoBehaviour
                 if (infectUseTime > infectInfTime)
                     infectUseTime -= infectSpeedupTime;
             }
+            dayText.text = "存活天數: " + day;
         }
     }
 
@@ -64,7 +76,42 @@ public class GameManager : MonoBehaviour
             yield return new WaitForSeconds(infectUseTime); 
         }
     }
-
+    public void showUnsafeProportion()
+    {
+        unsafeProportionText.text = "病毒感染率: " + (unsafeProportion * 100) + "%";
+        if(unsafeProportion*100 >= 70)
+        {
+            if(girlObj[(int)Girl.safe].activeSelf)
+                girlObj[(int)Girl.safe].SetActive(false);
+            if(!girlObj[(int)Girl.infect].activeSelf)
+                girlObj[(int)Girl.infect].SetActive(true);
+        }
+        else
+        {
+            if(!girlObj[(int)Girl.safe].activeSelf)
+                girlObj[(int)Girl.safe].SetActive(true);
+            if(girlObj[(int)Girl.infect].activeSelf)
+                girlObj[(int)Girl.infect].SetActive(false);
+        }
+        if(unsafeProportion*100 >= 100)
+        {
+            isGameOver = true;
+        }
+    }
+    public void gameOver()
+    {
+        if(isGameOver)
+        {
+            if(!gameOverObj.activeSelf)
+            {
+                SoundManager.soundManager.playSound(SoundType.fail);
+                gameOverObj.SetActive(true);
+            }
+               
+            if(Input.anyKeyDown)
+                SceneManager.LoadScene(0);
+        }
+    }
     public void pendingPush(ChessGrid grid)
     {
         if (pendingQueue.Count >= 3)
@@ -120,9 +167,9 @@ public class GameManager : MonoBehaviour
 
     public void clickGrid()
     {
-        if(Input.GetKeyDown(KeyCode.Mouse0)){
+        if(Input.GetKey(KeyCode.Mouse0)){
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, 10, -1); ;
+            RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, 100, -1); ;
             if (hit.collider != null)
             {
                 ChessGrid hitGrid = hit.collider.GetComponent<ChessGrid>();
@@ -131,6 +178,7 @@ public class GameManager : MonoBehaviour
                     //print(hitGrid.status + " " + hitGrid.locateX + " " + hitGrid.locateY); //TEST
                     if (hitGrid.status == Status.infect)
                     {
+                        SoundManager.soundManager.playSound(SoundType.button);
                         pendingPush(hitGrid);
                     } 
                     /*
@@ -169,12 +217,14 @@ public class GameManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         clickGrid();
         if (pendingQueue.Count != 0)
         {
             // Call QTE if not QTE-ing
         }
+        showUnsafeProportion();
+        gameOver();
     }
 }

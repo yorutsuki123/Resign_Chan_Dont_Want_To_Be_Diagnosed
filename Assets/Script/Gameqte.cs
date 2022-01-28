@@ -9,7 +9,26 @@ public class Gameqte : MonoBehaviour {
     public int rand = 0;
     public int tmp = 0;
     public int tf = 3;
-    public Text qteText;
+    public string qteStr;
+    public Text[] qteText= new Text[4];
+    public Sprite[] qteSprite= new Sprite[4];
+    public Image[] qteImage= new Image[4];
+
+    public int wsadToImage(char chara)
+    {
+        int imageNum = 0;
+        if(chara == 'w')
+            imageNum = 0;
+        else if(chara == 's')
+            imageNum = 1;
+        else if(chara == 'a')
+            imageNum = 2;
+        else if(chara == 'd')
+            imageNum = 3;
+        else 
+            imageNum = 4;
+        return imageNum;
+    }
     public void Qtemethod() {
         
         if(Qtekey.Count==0)
@@ -20,11 +39,26 @@ public class Gameqte : MonoBehaviour {
             }
             foreach (char q in Qtekey)
             {
-                qteText.text += q;
+                qteStr += q;
             }
         }
         if (GameManager.gameManager.pendingCount != 0) {
             if(Qtekey.Count != 0) {
+                for(int i=0;i<4;i++)
+                {
+                    int imageNum = wsadToImage(qteStr[i]);
+                    if(imageNum == 4)
+                    {
+                        qteImage[i].color = Color.black;
+                        imageNum = 3;
+                    }
+                    else
+                    {
+                        qteImage[i].color = Color.white;
+                    }
+                    qteImage[i].sprite = qteSprite[imageNum];
+                    // qteText[i].text = "" + qteStr[i];
+                }
                 if (Input.GetKeyDown(KeyCode.W)) {
                     qteCompare = 'w';
                 }
@@ -39,6 +73,7 @@ public class Gameqte : MonoBehaviour {
                 }
                 if(qteCompare == Qtekey.Peek())
                 {
+                    SoundManager.soundManager.playSound(SoundType.qte);
                     tf=1;
                     Qtekey.Dequeue();
                     qteCompare = '?';
@@ -50,15 +85,21 @@ public class Gameqte : MonoBehaviour {
                         Qtekey.Clear();
                         tf=0;
                         GameManager.gameManager.pendingPop(false);
-                        qteText.text="";
+                        qteStr="";
                         qteCompare = '?';
                     }
                 }
             }
-            else if(Qtekey.Count == 0 && tf == 1){
+            if(Qtekey.Count == 0 && tf == 1){
                 GameManager.gameManager.pendingPop(true);
-                Qtekey.Clear();
-                qteText.text="";
+                //Qtekey.Clear();
+                qteStr="";
+                qteCompare = '?';
+                for(int i=0;i<4;i++)
+                {
+                    qteText[i].text = "" ;
+                    qteImage[i].color = Color.black;
+                }
             }
         }
     }
