@@ -53,10 +53,9 @@ public class Gameqte : MonoBehaviour {
                         qteText.text="";
                         qteCompare = '?';
                     }
-
                 }
             }
-            if(Qtekey.Count == 0){
+            else if(Qtekey.Count == 0 && tf == 1){
                 GameManager.gameManager.pendingPop(true);
                 Qtekey.Clear();
                 qteText.text="";
