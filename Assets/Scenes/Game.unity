@@ -226,10 +226,10 @@ MonoBehaviour:
   speedupDay: 5
   diffUseTime: 16
   diffSpeedupTime: 1
-  diffInfTime: 3
+  diffInfTime: 8
   infectUseTime: 8
-  infectSpeedupTime: 0.8
-  infectInfTime: 2
+  infectSpeedupTime: 1
+  infectInfTime: 4
   gridSet: []
   dayText: {fileID: 1710825092}
   unsafeProportionText: {fileID: 1108541150}
@@ -1932,7 +1932,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -284.23, y: -243}
+  m_AnchoredPosition: {x: -284.23004, y: -243}
   m_SizeDelta: {x: 568.47, y: 430.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1212925164

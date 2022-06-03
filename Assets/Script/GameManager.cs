@@ -13,13 +13,13 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager gameManager;
     public int day = 0;
-    public int speedupDay = 5;
-    public float diffUseTime = 16.0f;
-    public float diffSpeedupTime = 1.0f;
-    public float diffInfTime = 3.0f;
-    public float infectUseTime = 8.0f;
-    public float infectSpeedupTime = 0.8f;
-    public float infectInfTime = 2.0f;
+    public int speedupDay;
+    public float diffUseTime;
+    public float diffSpeedupTime;
+    public float diffInfTime;
+    public float infectUseTime;
+    public float infectSpeedupTime;
+    public float infectInfTime;
     public List<ChessGrid> gridSet = new List<ChessGrid>();
     public Queue<ChessGrid> pendingQueue = new Queue<ChessGrid>();
     public Text dayText;

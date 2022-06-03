@@ -6,6 +6,11 @@ using UnityEngine.SceneManagement;
 public class StartSceneButtonControl : MonoBehaviour
 {
 
+    private void Start()
+    {
+        Application.targetFrameRate = 60;
+    }
+
     public void changeToGameScene()
     {
         SceneManager.LoadScene(1);
