@@ -3,6 +3,8 @@ FCUGDC GameJam 1101
 
 一款對抗武漢肺炎的有趣QTE小遊戲
 
+下載: [download](https://github.com/yorutsuki123/Resign_Chan_Dont_Want_To_Be_Diagnosed/releases)
+
 ## 遊玩方式
 遊戲畫面有許多六角形的城市，一般健康的城市呈現「灰色」，當程式變成「紅色」時，代表該城市已經被病毒汙染，需要在倒數時間內進行排除，否則病毒會擴散到鄰近城市。
 
