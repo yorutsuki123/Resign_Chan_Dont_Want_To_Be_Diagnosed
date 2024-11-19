@@ -12,6 +12,8 @@ public class Gameqte : MonoBehaviour {
     public string qteStr;
     public Text[] qteText= new Text[4];
     public Sprite[] qteSprite= new Sprite[4];
+    public Sprite[] qteClearSprite = new Sprite[4];
+    public Sprite[] qteFailSprite = new Sprite[4];
     public Image[] qteImage= new Image[4];
 
     public int wsadToImage(char chara)
@@ -31,7 +33,7 @@ public class Gameqte : MonoBehaviour {
     }
     public void Qtemethod() {
         
-        if(Qtekey.Count==0)
+        if(Qtekey.Count == 0)
         {
             for (int i = 0; i <= 3; i++) {
                 rand = Random.Range(0, 4);
@@ -43,8 +45,9 @@ public class Gameqte : MonoBehaviour {
             }
         }
         if (GameManager.gameManager.pendingCount != 0) {
-            if(Qtekey.Count != 0) {
-                for(int i=0;i<4;i++)
+            int nowInd = 4 - Qtekey.Count;
+            if (Qtekey.Count != 0) {
+                for(int i = 0; i < 4; i++)
                 {
                     int imageNum = wsadToImage(qteStr[i]);
                     if(imageNum == 4)
@@ -56,7 +59,10 @@ public class Gameqte : MonoBehaviour {
                     {
                         qteImage[i].color = Color.white;
                     }
-                    qteImage[i].sprite = qteSprite[imageNum];
+                    if (i < 4 - Qtekey.Count)
+                        qteImage[i].sprite = qteClearSprite[imageNum];
+                    else
+                        qteImage[i].sprite = qteSprite[imageNum];
                     // qteText[i].text = "" + qteStr[i];
                 }
                 if (Input.GetKeyDown(KeyCode.W)) {
@@ -74,37 +80,53 @@ public class Gameqte : MonoBehaviour {
                 if(qteCompare == Qtekey.Peek())
                 {
                     SoundManager.soundManager.playSound(SoundType.qte);
-                    tf=1;
+                    tf = 1;
                     Qtekey.Dequeue();
                     qteCompare = '?';
                 }
                 else 
                 {
-                    if(qteCompare != '?')
+                    if (qteCompare != '?')
                     {
+                        qteImage[nowInd].sprite = qteFailSprite[wsadToImage(qteStr[nowInd])];
                         Qtekey.Clear();
-                        tf=0;
-                        for(int i=0;i<4;i++)
+                        tf = 0;
+                        for (int i = 0; i < 4; i++)
                         {
-                            qteText[i].text = "" ;
-                            qteImage[i].color = Color.black;
+                            qteText[i].text = "";
+                            //qteImage[i].color = Color.black;
                         }
+                        StartCoroutine(SetBlackAfterDelay(.5f));
                         GameManager.gameManager.pendingPop(false);
-                        qteStr="";
+                        qteStr = "";
                         qteCompare = '?';
                     }
                 }
             }
-            if(Qtekey.Count == 0 && tf == 1){
+            if(Qtekey.Count == 0 && tf == 1)
+            {
+                qteImage[nowInd].sprite = qteClearSprite[wsadToImage(qteStr[nowInd])];
                 GameManager.gameManager.pendingPop(true);
                 //Qtekey.Clear();
-                qteStr="";
+                qteStr = "";
                 qteCompare = '?';
-                for(int i=0;i<4;i++)
+                for(int i = 0; i < 4; i++)
                 {
-                    qteText[i].text = "" ;
-                    qteImage[i].color = Color.black;
+                    qteText[i].text = "";
+                    //qteImage[i].color = Color.black;
                 }
+                StartCoroutine(SetBlackAfterDelay(.5f));
+            }
+        }
+    }
+    private IEnumerator SetBlackAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        if (GameManager.gameManager.pendingCount == 0)
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                qteImage[i].color = Color.black;
             }
         }
     }

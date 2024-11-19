@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager gameManager;
     public int day = 0;
+    public float secPerDay;
     public int speedupDay;
     public float diffUseTime;
     public float diffSpeedupTime;
@@ -46,7 +47,7 @@ public class GameManager : MonoBehaviour
     {
         while(true)
         {
-            yield return new WaitForSeconds(5); 
+            yield return new WaitForSeconds(secPerDay); 
             if(!isGameOver)
             {
                 day++;

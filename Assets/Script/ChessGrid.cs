@@ -18,11 +18,20 @@ public class ChessGrid : MonoBehaviour
     public Status status;
     public int locateX;
     public int locateY;
+    private Status lastStatus;
 
     void Start()
     {
         timeUIText = transform.GetChild(0).GetComponent<Text>();
-        StartCoroutine(passedDiffuseTime());
+    }
+    private void Update()
+    {
+        if (lastStatus != Status.infect && status == Status.infect)
+        {
+            StartCoroutine(showDiffuseTime());
+            StartCoroutine(passedDiffuseTime());
+        }
+        lastStatus = status;
     }
     public void changeColor(Status color)
     {
@@ -81,7 +90,7 @@ public class ChessGrid : MonoBehaviour
 
     public IEnumerator passedDiffuseTime()
     {
-        while(true)
+        while(status == Status.infect)
         {
             yield return new WaitForSeconds(1); 
             if(status == Status.infect)
@@ -94,12 +103,25 @@ public class ChessGrid : MonoBehaviour
                 }
                 timeUIText.text = "" + time;
             }
+            else
+            {
+                yield break;
+            }
+        }
+    }
+
+    public IEnumerator showDiffuseTime()
+    {
+        while (status == Status.infect)
+        {
+            timeUIText.text = "" + time;
+            yield return new WaitForSeconds(0.01f);
         }
     }
 
     public void init(int x, int y)
     {
-        status = Status.safe;
+        status = lastStatus = Status.safe;
         locateX = x;
         locateY = y;
     }
